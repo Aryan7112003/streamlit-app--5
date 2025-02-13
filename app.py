@@ -49,21 +49,14 @@ if st.button("Predict Sentiment"):
     if user_review.strip():  # Check if input is not empty
         # Clean and preprocess the review
         cleaned_review = clean_text(user_review)
-        st.write("Cleaned Review: ", cleaned_review)  # Debug: Show cleaned review
-        
+
         # Convert cleaned text to vector using the TF-IDF vectorizer
         review_vector = vectorizer.transform([cleaned_review])  # Convert text to vector
-        st.write("Review Vector: ", review_vector.toarray())  # Debug: Show vector
-        
+
         # Predict sentiment
         prediction = model.predict(review_vector)  # Predict sentiment
-        probabilities = model.predict_proba(review_vector)  # Get prediction probabilities
-        
-        st.write("Prediction Probabilities: ", probabilities)  # Debug: Show prediction probabilities
-        
-        confidence = np.max(probabilities) * 100  # Convert to percentage
-        st.write("Prediction Confidence: ", confidence)  # Debug: Show confidence
-        
+        confidence = np.max(model.predict_proba(review_vector)) * 100  # Convert to percentage
+
         # Generate a random fake name
         fake_name = fake.name()
 
@@ -71,10 +64,7 @@ if st.button("Predict Sentiment"):
         name_gender = "Male" if any(male_name in fake_name for male_name in ["John", "Mike", "David", "James", "Robert"]) else "Female"
 
         # Display appropriate emoji based on the name gender
-        if name_gender == "Male":
-            emoji = "👨"  # Man emoji
-        else:
-            emoji = "👩"  # Woman emoji
+        emoji = "👨" if name_gender == "Male" else "👩"
 
         # Create a DataFrame to display in table format
         result_df = pd.DataFrame({
